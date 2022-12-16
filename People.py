@@ -16,13 +16,13 @@ class Person() :
     
     @property
     def DOB(self) :
-        return self.birthday.strftime("\t %A,  %d - %B - %Y (That's week %W, and Day %j of the year)")
+        return self.birthday.strftime("\t %A, %d %B, %Y (That's week %W, and Day %j of the year)")
     
     @property
     def greeting(self) :
         return (greeting_message.format(self.full_name, self.DOB))
     
 class Player(Person) :
-    def __init__(self, first_name, last_name, birthday):
+    def __init__(self, first_name, last_name, birthday, funds):
         super().__init__(first_name, last_name, birthday)
-        self._funds = 0
+        self.funds = funds

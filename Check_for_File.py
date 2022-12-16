@@ -1,6 +1,5 @@
-import os
 
-       
+import os
 
 def check_for_file(path) :
     

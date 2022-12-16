@@ -1,0 +1,2 @@
+users with the same first and last names will pose an issue
+    need to have validation to check against the birthday

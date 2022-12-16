@@ -1,1 +1,9 @@
-    House Money: $1,000,000
+BLACKJACK USER DATA
+
+    House Cash: $1,000,000
+    
+    Player's First Name: test
+    Player's Last Name: test
+    Player's Birthday is: Sunday, March 05, 1978
+    Player's Full Name: test test
+    Player's Available Funds: $0

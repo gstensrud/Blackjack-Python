@@ -5,6 +5,7 @@ import People
 import Get_Date_Function
 import datetime
 import Yes_No_Validation
+import Check_for_File
 
 def stop():
     _ = input("\n\n Press <Enter> to quit ")
@@ -43,6 +44,7 @@ print(welcome)
 pause()
 clear()
 print()
+
 instructions = """
     The rules for Blackjack are simple.  You need to beat the Dealer's hand with
     the hand that you are dealt.  the closest to 21 without going over is the 
@@ -86,8 +88,35 @@ Blackjack_Card_Points.blackjack_points
 deck1 = Deck_of_Cards.Deck()
 deck1.shuffle()
 
+path = "E:\Python Code\Blackjack-Python\_Blackjack__.txt"
+
+checked_for_file = Check_for_File.check_for_file(path)
+
+###  NEED TO FIGURE OUT THE READ IN FROM THE FILE FIRST!!!
 
 
+
+if not checked_for_file : # same as if checked_for_file != True :
+    game_file = open(path, "a")
+    game_file.write(to_write)
+    game_file.close()
+    print("No file was found.   One has been created")
+    pause()
+
+with open(path, "r") as player_file :
+    file_context = player_file.readlines()  
+    house_cash_string = file_context[0]
+    money_index = house_cash_string.index("$")
+    _stripedCommas = house_cash_string[money_index + 1:].replace(",", "")
+    program_cash = int(_stripedCommas)
+    
+    
+to_write_to_game_file = """    
+    The user first name is: {}
+    The user last name is: {}
+    The user birthday is: {}
+    The full name is: {}
+    This Player Has ${} to play Blackjack with""".format(user.first_name, user.last_name, user.DOB, user.full_name, )
 
 
 
