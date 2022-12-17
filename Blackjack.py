@@ -96,30 +96,6 @@ checked_for_file = Check_for_File.check_for_file(path)
 
 
 
-if not checked_for_file : # same as if checked_for_file != True :
-    game_file = open(path, "a")
-    game_file.write(to_write)
-    game_file.close()
-    print("No file was found.   One has been created")
-    pause()
-
-with open(path, "r") as player_file :
-    file_context = player_file.readlines()  
-    house_cash_string = file_context[0]
-    money_index = house_cash_string.index("$")
-    _stripedCommas = house_cash_string[money_index + 1:].replace(",", "")
-    program_cash = int(_stripedCommas)
-    
-    
-to_write_to_game_file = """    
-    The user first name is: {}
-    The user last name is: {}
-    The user birthday is: {}
-    The full name is: {}
-    This Player Has ${} to play Blackjack with""".format(user.first_name, user.last_name, user.DOB, user.full_name, )
-
-
-
 stop()
 
 

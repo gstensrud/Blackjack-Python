@@ -1,0 +1,12 @@
+if playerFirstName in file_context and playerLastName in file_context:
+    check the birthday
+
+
+
+
+if file creates is true:
+    write the stuff at the appropriate index
+else:
+    write to the file after the last line
+
+(will probably need to format a raw string for this to make the coding easiest)

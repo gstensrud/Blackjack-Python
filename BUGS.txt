@@ -1,2 +1,4 @@
 users with the same first and last names will pose an issue
     need to have validation to check against the birthday
+
+birthday format and manipulation needs to be done.  That way a user can enter it in any way they choose

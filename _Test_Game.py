@@ -97,9 +97,14 @@ deck_of_cards.shuffle() # Shuffles the deck from the Deck of Cards.py file.  The
 #print(deck_of_cards.deck)
 
 # Set the path to where the file should be located
-path = "E:\Python Code\Blackjack-Python\_Blackjack__.txt"
+path = "E:\Python Code\Blackjack-Python\__Blackjack__.txt"
 
+# Create Empty lists for later
+full_name_list = []
+# another empty list to get the birthdays in case there is the same first and last name more than once
+birthday_list = []
 
+# String to write if there is no file found in the path
 to_write = """BLACKJACK USER DATA
 
     House Cash: $1,000,000
@@ -114,44 +119,48 @@ to_write = """BLACKJACK USER DATA
 # Check to see if the file exists ... this will return a boolean
 checked_for_file = Check_for_File.check_for_file(path)
 
-# Ask for the user input.  Do this now, as we need it in a few places later, but this is the easiest place to put is, since we can use the variable its stored as when we choose to.
-player_first =  input("enter your first name: ")
-player_last = input("enter your last name: ")
-
-bad_DOB = True
-while bad_DOB :
-    player_DOB = input("enter your birthday [Month(xx) Day(xx) Year(xxxx)]: ").strip()
-    # We need to manipulate this birthday string so it is always in the forma that the program knows, regardless of how the user entered it.
-
-
-    # We need to change the birthday from a string to a date so that we can work with it.  We put this in a try/except block so that if the user enters a bad date, the program won't allow it
-    try:
-        date_DOB = datetime.datetime.strptime(player_DOB, "%m %d %Y").date()
-        bad_DOB = False
-    except:
-        print("BAD DATE FORMAT")
-        pause()
-# This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
+file_created = False # Random switch variable if the file gets created
 
 if not checked_for_file : # same as if checked_for_file != True :
     game_file = open(path, "a")
     game_file.write(to_write)
+    file_created = True # Flip the switch variable to True because we created the file
+    
+    # Write to file code stuff here ... this is also where the birthday stuff will go ...
+    # I decided to write this code later, as I have all the variables converted to their appropriate data types required later in the code, so I'll just do it there
+    
     game_file.close()
-    print("No file was found.   One has been created")
+    print("No file was found. One has been created")
     pause()
+# ********   THIS WITH BLOCK MAY BE WRONG!!!!!
+with open(path, "r") as game_file :
+    file_context = game_file.readlines() #reading each line and saving as a list index item 
+    #print(file_context)
+    
+    # Go to the module, use the function there, and use the file_context at index[1] to search for a "$"        
+    money_string = Text_String_Search.String_Search(file_context[2], "$")
+    
+    program_cash = int(money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
+    print(program_cash)
+    
+    # We do the same here to get some of the other info from the data file that is there, we just dont need to parse it to an int
+    p_first_name = Text_String_Search.String_Search(file_context[4], ":")
+    p_last_name = Text_String_Search.String_Search(file_context[5], ":")
+    p_bday = Text_String_Search.String_Search(file_context[6], ":")
+    p_full_name = Text_String_Search.String_Search(file_context[7], ":")
+    p_funds = Text_String_Search.String_Search(file_context[8], "$")
+    player_funds = int(p_funds)
 
-# elif (or else :) that returns true:
-elif checked_for_file:
-    # open the (path) file as a "r"ead only file
-    with open(path, "r") as game_file :
-        # This will return a LIST of each line in the (path) as it's own index
-        file_context = game_file.readlines()        
-    # Create an empty list
-    full_name_list = []
-    # another empty list to get the birthdays in case there is the same first and last name more than once
-    birthday_list = []
+# Ask for the user input.  Do this now, as we need it in a few places later, but this is the easiest place to put is, since we can use the variable its stored as when we choose to.
+player_first =  input("enter your first name: ")
+player_last = input("enter your last name: ")
+# open the (path) file as a "r"ead only file
+with open(path, "r") as game_file :        
+    # This will return a LIST of each line in the (path) as it's own index
+    file_context = game_file.readlines()    
     # for each indexed line from the created file_context list
     for index_line in file_context:
+         # *** this could be replaced with text_string_search function and do very similar to what this is doing now ***
         # if "full name" is found in any of the indexed lines ...
         if "Full Name" in index_line :
             # look for the (":") and get that index location
@@ -162,26 +171,46 @@ elif checked_for_file:
             full_name_list.append(_full_name)
         
     # We do the same thing here as we did above to get the birthday.  We probably won't need this, but it's easier to do this now, rather than later.
-        if "Birthday is" in file_context:
+        if "Birthday is" in index_line:
             search = index_line.index(":")
             _bday = index_line[search + 1:].strip()
             birthday_list.append(_bday)
+
+    bad_DOB = True # Variable for birthday format validation
+    while bad_DOB :
+        player_DOB = input("enter your birthday [Month(xx) Day(xx) Year(xxxx)]: ").strip()
+        # We need to manipulate this birthday string so it is always in the forma that the program knows, regardless of how the user entered it.
+        
+        # Here I can code a dictionary to make things the date input from numbers to Month names.  That way, the user can enter the birthday any way they want
+
+        # We need to change the birthday from a string to a date so that we can work with it.  We put this in a try/except block so that if the user enters a bad date, the program won't allow it
+        try:
+            date_DOB = datetime.datetime.strptime(player_DOB, "%m %d %Y").date()
+            bad_DOB = False
+        except:
+            print("BAD DATE FORMAT")
+            pause()
+        # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
+
+birthday = str(birthday_list)
     
     #   this is going to take the input just received and create the Player in the People module.  To call upon this Person, we need a variable (user)
-    user = People.Player(first_name = player_first, last_name = player_last, birthday = date_DOB, funds = 0)
-    """
-    print(file_context)
-    print(full_name_list)   
-    print(birthday_list)
-    """
-    # Now we check to see if the user is in the file
-    # We take the full_name list we created that only contains the full name of the user
-    if user.full_name in full_name_list :
-        print("You have been found in the file")
-        pause()
-    else:
-        print("NOT FOUND")
-        stop()
+user = People.Player(first_name = player_first, last_name = player_last, birthday = date_DOB, funds = 0)
+
+print("file_context = ", file_context, "-", type(file_context))
+print("full_name list = ", full_name_list, "-", type(full_name_list))   
+print("birthday_list = ", birthday_list, "-", type(birthday_list))
+
+# Now we check to see if the user is in the file
+# We take the full_name list we created that only contains the full name of the user
+existing_user = True
+if user.full_name in full_name_list :
+    print("You have been found in the file")
+    pause()
+else:
+    print("NOT FOUND")
+    existing_user = False
+    pause()
 
  #this will go to the greeting property (method) on the People module, and apply the user info to it
 print(user.greeting)
@@ -198,20 +227,46 @@ with open(path, "r") as game_file :
     # Go to the module, use the function there, and use the file_context at index[1] to search for a "$"        
     money_string = Text_String_Search.String_Search(file_context[2], "$")
     
-    program_cash = int(money_string.replace(",", "")) # Cast the variable to an number,and strip off the whitespace, so that we can do math later
+    program_cash = int(money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
     print(program_cash)
-   
-   # NEED TO READ IN THE OTHER INFO FROM THE FILE, AND MAKE IS USEABLE... The above is only to read in the House Cash
-   
-
-# with open(path, "w") as game_file : # open the game file ... THIS WILL BE IN WRITE MODE!!!
-#     file_context = game_file.writelines(file_context)
-
-# file_context[1] = "House Money: ${:0,d}\n".format(house_cash)
     
+    # We do the same here to get some of the other info from the data file that is there, we just dont need to parse it to an int
+    p_first_name = Text_String_Search.String_Search(file_context[4], ":")
+    p_last_name = Text_String_Search.String_Search(file_context[5], ":")
+    p_bday = Text_String_Search.String_Search(file_context[6], ":")
+    p_full_name = Text_String_Search.String_Search(file_context[7], ":")
+    p_funds = Text_String_Search.String_Search(file_context[8], "$")
+    player_funds = int(p_funds)
+
+print()
+print("p_first_name variable = " + p_first_name + " - ", type(p_first_name))
+print("p_last_name variable = " + p_last_name + " - ", type(p_last_name))
+print("p_full_name variable (from data file) =  " + p_full_name + " - ", type(p_full_name))
+print("full_name_list (Empty List created at in when the code was checking \n\t to \
+    see if the file in the path exists) = ", full_name_list ," - ", type(full_name_list))
+print("p_bday variable = " + p_bday + " - ", type(p_bday))
+print("birthday variable (changed to a string from the birthday_list) = " + birthday + \
+    " - ", type(birthday))
+print("birthday_list (Empty List created at the same time when the code was checking \
+    \n\t to see if the file in the path exists) = ", birthday_list, " - ", type(birthday_list))
+print("p_funds variable = " + p_funds + " - ", type(p_funds))
+print("player_funds (above variable parsed to an int) = ", player_funds, " - ", type(player_funds))
+
+if not existing_user:
+    game_file = open(path, "w") # open the game file ... THIS WILL BE IN WRITE MODE!!!
+    file_context = game_file.writelines(file_context)
+    file_context = ""
+    file_context = p_first_name
+    file_context = p_last_name
+    file_context = p_bday
+    file_context = p_full_name
+    print("the file should be updated")
+
+
 # house_cash = 50000
 
 print("end")
+
 
 
 # Will need more similar code for the player money overwrite once game as been played more than once
