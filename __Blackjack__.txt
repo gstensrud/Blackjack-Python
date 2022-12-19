@@ -1,0 +1,9 @@
+BLACKJACK USER DATA
+
+    House Cash: $1,000,000
+    
+    Player's First Name: test
+    Player's Last Name: test
+    Player's Birthday is: 2000-01-01
+    Player's Full Name: test test
+    Player's Available Funds: $0

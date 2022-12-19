@@ -117,7 +117,7 @@ to_write = """BLACKJACK USER DATA
 """  
     
 # Check to see if the file exists ... this will return a boolean
-checked_for_file = Check_for_File.check_for_file(path)
+checked_for_file = Check_for_File.check_for_file(path) # "File Found" on the console comes from the function here
 
 file_created = False # Random switch variable if the file gets created
 
@@ -135,15 +135,7 @@ if not checked_for_file : # same as if checked_for_file != True :
 # ********   THIS WITH BLOCK MAY BE WRONG!!!!!
 with open(path, "r") as game_file :
     file_context = game_file.readlines() #reading each line and saving as a list index item 
-    #print(file_context)
-    
-    # Go to the module, use the function there, and use the file_context at index[1] to search for a "$"        
-    money_string = Text_String_Search.String_Search(file_context[2], "$")
-    
-    program_cash = int(money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
-    print(program_cash)
-    
-    # We do the same here to get some of the other info from the data file that is there, we just dont need to parse it to an int
+    # now we read in all the information that we want from each line of the text file, and parse them to whatever data type we want them to be in later
     p_first_name = Text_String_Search.String_Search(file_context[4], ":")
     p_last_name = Text_String_Search.String_Search(file_context[5], ":")
     p_bday = Text_String_Search.String_Search(file_context[6], ":")
@@ -151,31 +143,11 @@ with open(path, "r") as game_file :
     p_funds = Text_String_Search.String_Search(file_context[8], "$")
     player_funds = int(p_funds)
 
+if p_first_name == "" :
 # Ask for the user input.  Do this now, as we need it in a few places later, but this is the easiest place to put is, since we can use the variable its stored as when we choose to.
-player_first =  input("enter your first name: ")
-player_last = input("enter your last name: ")
-# open the (path) file as a "r"ead only file
-with open(path, "r") as game_file :        
-    # This will return a LIST of each line in the (path) as it's own index
-    file_context = game_file.readlines()    
-    # for each indexed line from the created file_context list
-    for index_line in file_context:
-         # *** this could be replaced with text_string_search function and do very similar to what this is doing now ***
-        # if "full name" is found in any of the indexed lines ...
-        if "Full Name" in index_line :
-            # look for the (":") and get that index location
-            search = index_line.index(":")
-            # when that is found +1 (to go to where the value of what we're looking for actually is), then strip all the whitespace
-            _full_name = index_line[search + 1:].strip()
-            # Take that stripped string, and add (.append) it to the empty full_name [] list 
-            full_name_list.append(_full_name)
-        
-    # We do the same thing here as we did above to get the birthday.  We probably won't need this, but it's easier to do this now, rather than later.
-        if "Birthday is" in index_line:
-            search = index_line.index(":")
-            _bday = index_line[search + 1:].strip()
-            birthday_list.append(_bday)
-
+    player_first =  input("enter your first name: ")
+    player_last = input("enter your last name: ")
+    
     bad_DOB = True # Variable for birthday format validation
     while bad_DOB :
         player_DOB = input("enter your birthday [Month(xx) Day(xx) Year(xxxx)]: ").strip()
@@ -190,12 +162,65 @@ with open(path, "r") as game_file :
         except:
             print("BAD DATE FORMAT")
             pause()
-        # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
+#  Now we need to write this information to the file
+    # game_file = open(path, "w") # open the game file ... THIS WILL BE IN WRITE MODE!!!
+    # game_file.writelines(file_context)
+    # game_file.writelines(to_write)
+    # game_file.close()
+    print("variable player_first (when path file first name is found to be empty)= " + player_first + " is a : ", type(player_first))
+    print("variable player_last (when path file first name is found to be empty)= " + player_last + " is a : ", type(player_last))
+    print("variable player_DOB (when path file first name is found to be empty)= " + player_DOB + " is a : ", type(player_DOB)) 
+    print("concatenated name to form full name (when path file first name is found to be empty)= " + player_first + " " + player_last) 
+    
+    player_full_name = player_first + " " + player_last
+    the_overwrite = """BLACKJACK USER DATA
+
+    House Cash: $1,000,000
+    
+    Player's First Name: {}
+    Player's Last Name: {}
+    Player's Birthday is: {}
+    Player's Full Name: {}
+    Player's Available Funds: $0
+""".format(player_first, player_last, date_DOB, player_full_name)
+    
+    with open(path, "w") as game_file :
+        
+        game_file.writelines(the_overwrite)
+        
+    print("the file should be updated")
+    
+   # open the (path) file as a "r"ead only file
+with open(path, "r") as game_file :        
+    # This will return a LIST of each line in the (path) as it's own index
+    file_context = game_file.readlines()    
+    # for each indexed line from the created file_context list
+    for index_line in file_context:
+        # *** this could be replaced with text_string_search function and do very similar to what  is doing now ***
+        # if "full name" is found in any of the indexed lines ...
+        if "Full Name" in index_line :
+            # look for the (":") and get that index location
+            search = index_line.index(":")
+            # when that is found +1 (to go to where the value of what we're looking for actually is), then strip all the whitespace
+            _full_name = index_line[search + 1:].strip()
+            # Take that stripped string, and add (.append) it to the empty full_name [] list 
+            full_name_list.append(_full_name)
+                
+        # We do the same thing here as we did above to get the birthday.  We probably won't need this, but it's easier to do this now, rather than later.
+        if "Birthday is" in index_line:
+            search = index_line.index(":")
+            _bday = index_line[search + 1:].strip()
+            birthday_list.append(_bday)
+    
+    # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
 
 birthday = str(birthday_list)
     
     #   this is going to take the input just received and create the Player in the People module.  To call upon this Person, we need a variable (user)
 user = People.Player(first_name = player_first, last_name = player_last, birthday = date_DOB, funds = 0)
+# These are not populating the lists ... this needs to be looked into to see why
+# I should just have to read in the file again
+
 
 print("file_context = ", file_context, "-", type(file_context))
 print("full_name list = ", full_name_list, "-", type(full_name_list))   
@@ -230,13 +255,7 @@ with open(path, "r") as game_file :
     program_cash = int(money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
     print(program_cash)
     
-    # We do the same here to get some of the other info from the data file that is there, we just dont need to parse it to an int
-    p_first_name = Text_String_Search.String_Search(file_context[4], ":")
-    p_last_name = Text_String_Search.String_Search(file_context[5], ":")
-    p_bday = Text_String_Search.String_Search(file_context[6], ":")
-    p_full_name = Text_String_Search.String_Search(file_context[7], ":")
-    p_funds = Text_String_Search.String_Search(file_context[8], "$")
-    player_funds = int(p_funds)
+
 
 print()
 print("p_first_name variable = " + p_first_name + " - ", type(p_first_name))
@@ -252,15 +271,9 @@ print("birthday_list (Empty List created at the same time when the code was chec
 print("p_funds variable = " + p_funds + " - ", type(p_funds))
 print("player_funds (above variable parsed to an int) = ", player_funds, " - ", type(player_funds))
 
-if not existing_user:
-    game_file = open(path, "w") # open the game file ... THIS WILL BE IN WRITE MODE!!!
-    file_context = game_file.writelines(file_context)
-    file_context = ""
-    file_context = p_first_name
-    file_context = p_last_name
-    file_context = p_bday
-    file_context = p_full_name
-    print("the file should be updated")
+
+
+    
 
 
 # house_cash = 50000
