@@ -4,6 +4,6 @@ BLACKJACK USER DATA
     
     Player's First Name: test
     Player's Last Name: test
-    Player's Birthday is: 2000-01-01
+    Player's Birthday is: 01 02 2003
     Player's Full Name: test test
-    Player's Available Funds: $0
+    Player's Available Funds: $500

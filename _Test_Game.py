@@ -170,6 +170,7 @@ if p_first_name == "" :
     print("variable player_first (when path file first name is found to be empty)= " + player_first + " is a : ", type(player_first))
     print("variable player_last (when path file first name is found to be empty)= " + player_last + " is a : ", type(player_last))
     print("variable player_DOB (when path file first name is found to be empty)= " + player_DOB + " is a : ", type(player_DOB)) 
+    # print("variable date_DOB (when path file first name is found to be empty)= " + date_DOB + " is a : ", type(date_DOB)) 
     print("concatenated name to form full name (when path file first name is found to be empty)= " + player_first + " " + player_last) 
      
     player_full_name = player_first + " " + player_last
@@ -187,7 +188,7 @@ if p_first_name == "" :
     Player's Birthday is: {}
     Player's Full Name: {}
     Player's Available Funds: $0
-""".format(player_first, player_last, date_DOB, player_full_name)
+""".format(player_first, player_last, player_DOB, player_full_name)
     
     with open(path, "w") as game_file :
         
@@ -221,18 +222,28 @@ if p_first_name != "" :
         
         # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
 
-string_birthday = str(birthday_list)
+#string_birthday = str(birthday_list)
+#formatted_date = datetime.datetime.strptime(birthday_list, "%m %d %Y").date()
+bdayToUse = birthday_list[0]
+
 
 print("Did i make it this far?? 1")
+birthday_to_use_index = 0
+user_bDay_string = birthday_list[birthday_to_use_index]
+user_bDay_object = datetime.datetime.strptime(user_bDay_string, "%m %d %Y").date()
     #   this is going to take the input just received and create the Player in the People module.  To call upon this Person, we need a variable (user)
-user = People.Player(first_name = player_first, last_name = player_last, birthday = string_birthday, funds = 0)
+user = People.Player(first_name = player_first, last_name = player_last, birthday = user_bDay_object, funds = 0)
 # These are not populating the lists ... this needs to be looked into to see why
 # I should just have to read in the file again
 print("Did i make it this far?? 2")
-print("string_birthday variable = ", string_birthday, "-", type(string_birthday))
+#print("variable formatted_DOB = ", formatted_DOB, "-", type(formatted_DOB))
+#print("string_birthday variable = ", string_birthday, "-", type(string_birthday))
+#print("formatted_date variable = ", formatted_date, "-", type(formatted_date))
 print("file_context = ", file_context, "-", type(file_context))
 print("full_name list = ", full_name_list, "-", type(full_name_list))   
 print("birthday_list = ", birthday_list, "-", type(birthday_list))
+# print("variable date_DOB (when path file first name is found to be empty)= " + date_DOB + " is a : ", type(date_DOB)) 
+#print("player_DOB variable = ", player_DOB, "-", type(player_DOB))
 
 # Now we check to see if the user is in the file
 # We take the full_name list we created that only contains the full name of the user
@@ -263,7 +274,8 @@ with open(path, "r") as game_file :
     money_string = Text_String_Search.String_Search(file_context[2], "$")
     
     program_cash = int(money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
-    print(program_cash)
+    print("variable program_cash = ", program_cash)
+    print("that was taken from the path file at index 2 [2]")
     
 
 
@@ -274,14 +286,34 @@ print("p_full_name variable (from data file) =  " + p_full_name + " - ", type(p_
 print("full_name_list (Empty List created at in when the code was checking \n\t to \
     see if the file in the path exists) = ", full_name_list ," - ", type(full_name_list))
 print("p_bday variable = " + p_bday + " - ", type(p_bday))
-print("string_birthday variable (changed to a string from the birthday_list) = " + string_birthday + \
-    " - ", type(string_birthday))
-print("birthday_list (Empty List created at the same time when the code was checking \
-    \n\t to see if the file in the path exists) = ", birthday_list, " - ", type(birthday_list))
+# print("string_birthday variable (changed to a string from the birthday_list) = " + string_birthday + \
+#     " - ", type(string_birthday))
+# print("birthday_list (Empty List created at the same time when the code was checking \
+#     \n\t to see if the file in the path exists) = ", birthday_list, " - ", type(birthday_list))
 print("p_funds variable = " + p_funds + " - ", type(p_funds))
 print("player_funds (above variable parsed to an int) = ", player_funds, " - ", type(player_funds))
 
 
+with open(path, "r") as game_file :
+    file_context = game_file.readlines() #reading each line and saving as a list index item 
+    #print(file_context)
+    
+    # Go to the module, use the function there, and use the file_context at index[1] to search for a "$"        
+    play_money_string = Text_String_Search.String_Search(file_context[8], "$")
+    
+    play_cash = int(play_money_string.replace(",", "")) # Parse the variable to an number,and strip off the whitespace, so that we can do math later
+    print("variable play_cash = ", play_cash)
+    print("that was taken from the path file at index 8 [8]")
+    
+
+# if player_funds <= 0 :
+#     funding = input("\n\tYou have no funds to play blackjack with.  How much would you like to deposit?").strip().replace(",", "")
+    
+#     try:
+#         play_money = int(funding)
+#     except:
+#         print("\tYou must enter a whole dollar amount to continue ...")
+#         pause()
 
     
 
