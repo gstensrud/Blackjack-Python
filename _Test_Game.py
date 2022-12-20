@@ -171,8 +171,13 @@ if p_first_name == "" :
     print("variable player_last (when path file first name is found to be empty)= " + player_last + " is a : ", type(player_last))
     print("variable player_DOB (when path file first name is found to be empty)= " + player_DOB + " is a : ", type(player_DOB)) 
     print("concatenated name to form full name (when path file first name is found to be empty)= " + player_first + " " + player_last) 
-    
+     
     player_full_name = player_first + " " + player_last
+    
+    # Here I need to append the full_name_'ist, and the birthday_list 
+    full_name_list.append(player_full_name)
+    birthday_list.append(player_DOB)
+    
     the_overwrite = """BLACKJACK USER DATA
 
     House Cash: $1,000,000
@@ -189,39 +194,42 @@ if p_first_name == "" :
         game_file.writelines(the_overwrite)
         
     print("the file should be updated")
-    
+if p_first_name != "" :
+    player_first =  input("enter your first name: ")
+    player_last = input("enter your last name: ") 
    # open the (path) file as a "r"ead only file
-with open(path, "r") as game_file :        
-    # This will return a LIST of each line in the (path) as it's own index
-    file_context = game_file.readlines()    
-    # for each indexed line from the created file_context list
-    for index_line in file_context:
-        # *** this could be replaced with text_string_search function and do very similar to what  is doing now ***
-        # if "full name" is found in any of the indexed lines ...
-        if "Full Name" in index_line :
-            # look for the (":") and get that index location
-            search = index_line.index(":")
-            # when that is found +1 (to go to where the value of what we're looking for actually is), then strip all the whitespace
-            _full_name = index_line[search + 1:].strip()
-            # Take that stripped string, and add (.append) it to the empty full_name [] list 
-            full_name_list.append(_full_name)
-                
-        # We do the same thing here as we did above to get the birthday.  We probably won't need this, but it's easier to do this now, rather than later.
-        if "Birthday is" in index_line:
-            search = index_line.index(":")
-            _bday = index_line[search + 1:].strip()
-            birthday_list.append(_bday)
-    
-    # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
+    with open(path, "r") as game_file :        
+        # This will return a LIST of each line in the (path) as it's own index
+        file_context = game_file.readlines()    
+        # for each indexed line from the created file_context list
+        for index_line in file_context:
+            # *** this could be replaced with text_string_search function and do very similar to what  is doing now ***
+            # if "full name" is found in any of the indexed lines ...
+            if "Full Name" in index_line :
+                # look for the (":") and get that index location
+                search = index_line.index(":")
+                # when that is found +1 (to go to where the value of what we're looking for actually is), then strip all the whitespace
+                _full_name = index_line[search + 1:].strip()
+                # Take that stripped string, and add (.append) it to the empty full_name [] list 
+                full_name_list.append(_full_name)
+                    
+            # We do the same thing here as we did above to get the birthday.  We probably won't need this, but it's easier to do this now, rather than later.
+            if "Birthday is" in index_line:
+                search = index_line.index(":")
+                _bday = index_line[search + 1:].strip()
+                birthday_list.append(_bday)
+        
+        # This input will be used later to create the Player...use all of the required arguments that are asked for in the __init__(), unless some of that will have their values hard coded.
 
-birthday = str(birthday_list)
-    
+string_birthday = str(birthday_list)
+
+print("Did i make it this far?? 1")
     #   this is going to take the input just received and create the Player in the People module.  To call upon this Person, we need a variable (user)
-user = People.Player(first_name = player_first, last_name = player_last, birthday = date_DOB, funds = 0)
+user = People.Player(first_name = player_first, last_name = player_last, birthday = string_birthday, funds = 0)
 # These are not populating the lists ... this needs to be looked into to see why
 # I should just have to read in the file again
-
-
+print("Did i make it this far?? 2")
+print("string_birthday variable = ", string_birthday, "-", type(string_birthday))
 print("file_context = ", file_context, "-", type(file_context))
 print("full_name list = ", full_name_list, "-", type(full_name_list))   
 print("birthday_list = ", birthday_list, "-", type(birthday_list))
@@ -238,8 +246,10 @@ else:
     pause()
 
  #this will go to the greeting property (method) on the People module, and apply the user info to it
+print("Did i make it this far?? 3")
 print(user.greeting)
-print(user.DOB)
+print("Did i make it this far?? 4")
+print(user.DOB_info)
 # We assume that this program has never been ran before. So we declare all the variables, and set them to their required values, and will have the program change them as we need them to.
 
 
@@ -264,8 +274,8 @@ print("p_full_name variable (from data file) =  " + p_full_name + " - ", type(p_
 print("full_name_list (Empty List created at in when the code was checking \n\t to \
     see if the file in the path exists) = ", full_name_list ," - ", type(full_name_list))
 print("p_bday variable = " + p_bday + " - ", type(p_bday))
-print("birthday variable (changed to a string from the birthday_list) = " + birthday + \
-    " - ", type(birthday))
+print("string_birthday variable (changed to a string from the birthday_list) = " + string_birthday + \
+    " - ", type(string_birthday))
 print("birthday_list (Empty List created at the same time when the code was checking \
     \n\t to see if the file in the path exists) = ", birthday_list, " - ", type(birthday_list))
 print("p_funds variable = " + p_funds + " - ", type(p_funds))

@@ -15,12 +15,12 @@ class Person() :
         return self.first_name + " " + self.last_name
     
     @property
-    def DOB(self) :
+    def DOB_info(self) :
         return self.birthday.strftime("\t %A, %d %B, %Y (That's week %W, and Day %j of the year)")
     
     @property
     def greeting(self) :
-        return (greeting_message.format(self.full_name, self.DOB))
+        return (greeting_message.format(self.full_name, self.DOB_info))
     
 class Player(Person) :
     def __init__(self, first_name, last_name, birthday, funds):
